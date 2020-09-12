@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{book.title}}{% endblock %}
+
+{% block content %}
+<div id="header">
+    <span class="logo">BookBarn</span>
+    <ul class="menu">
+        {% if request.session.user_id == None %}
+        <li><a href="/">Login / Register</a></li>
+        {% else %}
+        <li><a href="/bookbarn/homepage">Homepage</a></li>
+        <li><a href="/bookbarn/account/{{user_info.id}}">Account</a></li>
+        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorited Books</a></li>
+        <li><a href="/bookbarn/orders/{{user_info.id}}">Orders</a></li>
+        <li><a href="/bookbarn/requests/{{user_info.id}}">Sale / Trade Requests</a></li>
+        {% endif %}
+    </ul>
+    <span class="user">
+        {% if request.session.user_id != None %}
+        Hello {{ request.session.name }} | 
+        <a href="/logout">Logout</a>
+        {% endif %}
+    </span>
+</div>
+<div class="content">
+    <h1>{{book.title}}</h1>
+    <img src="{{book.image.url}}" class="image_detail">
+    {% with total_faves=book.faves.count %}
+    <div class="image-info">
+        <div>
+            <span class="count">
+                {{total_faves}} like{{total_faves|pluralize}}
+            </span>
+        </div>
+        {{book.desc|linebreaks}}
+    </div>
+    <div class="image-likes">
+        {% for user in book.faves.all %}
+        <div>
+            <img src="{{user.profile.photo.url}}">
+            <p>{{user.first_name}}</p>
+        </div>
+        {% empty %}
+        Nobody has favorited this book yet.
+        {% endfor %}
+    </div>
+    {% endwith %}
+</div>
+{% endblock %}

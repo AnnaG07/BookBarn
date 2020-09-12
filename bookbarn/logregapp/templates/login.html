@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login / Register{% endblock %}
+
+{% block content %}
+<div class="content">
+    <section>
+        <h2>Registration</h2>
+        <form action="/register" method="POST">
+            {% csrf_token %}
+            <p>First Name:</p>
+            <input type="text" name="first_name">
+            <p>Last Name:</p>
+            <input type="text" name="last_name">
+            <p>Email:</p>
+            <input type="email" name="email">
+            <p>Password:</p>
+            <input type="password" name="password">
+            <p>Confirm Password:</p>
+            <input type="password" name="pw_conf">
+            <input type="submit" value="Register">
+        </form>
+        <!--<form method="post">
+            {{user_form.as_p}}
+            {% csrf_token %}
+            <p><input type="submit" value="Create Account"></p>
+        </form>-->
+    </section>
+    <section>
+        <h2>Login</h2>
+        <form action="/login" method="POST">
+            {% csrf_token %}
+            <p>Email:</p>
+            <input type="email" name="email">
+            <p>Password:</p>
+            <input type="password" name="password">
+            <input type="submit" value="Log In">
+        </form>
+        <!--<form method="post">
+            {{form.as_p}}
+            {% csrf_token %}
+            <p><input type="submit" value="Log In"></p>
+        </form>-->
+    </section>
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endblock %}

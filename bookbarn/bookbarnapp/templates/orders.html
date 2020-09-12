@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Orders{% endblock %}
+
+{% block content %}
+<div id="header">
+    <span class="logo">BookBarn</span>
+    <ul class="menu">
+        <li><a href="/bookbarn/homepage">Homepage</a></li>
+        <li><a href="/bookbarn/account/{{user_info.id}}">Account</a></li>
+        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorited Books</a></li>
+        <li><a href="/bookbarn/requests/{{user_info.id}}">Sale / Trade Requests</a></li>
+    </ul>
+    <span class="user">
+        {% if request.session.user_id != None %}
+            Hello, {{ request.session.name }} | 
+            <a href="/logout">Logout</a>
+        {% endif %}
+    </span>
+</div>
+<div class="content">
+    <h1>ordered Books placeholder</h1>
+</div>
+{% endblock %}

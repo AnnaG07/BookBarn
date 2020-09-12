@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Successful Login / Registration{% endblock %}
+
+{% block content %}
+    <h2>Welcome, {{ request.session.name }}</h2>
+    <p>You have successfully logged in / registered!</p>
+    <a href="/logout">Log Out</a>
+{% endblock %}

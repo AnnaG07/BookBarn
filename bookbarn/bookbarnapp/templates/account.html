@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Account Information{% endblock %}
+
+{% block content %}
+<div id="header">
+    <span class="logo">BookBarn</span>
+    <ul class="menu">
+        {% if request.session.user_id == None %}
+        <li><a href="/">Login / Register</a></li>
+        {% else %}
+        <li><a href="/bookbarn/homepage">Homepage</a></li>
+        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorited Books</a></li>
+        <li><a href="/bookbarn/orders/{{user_info.id}}">Orders</a></li>
+        <li><a href="/bookbarn/requests/{{user_info.id}}">Sale / Trade Requests</a></li>
+        {% endif %}
+    </ul>
+    <span class="user">
+        {% if request.session.user_id != None %}
+        Hello {{ request.session.name }} | 
+        <a href="/logout">Logout</a>
+        {% endif %}
+    </span>
+</div>
+<div class="content">
+    <h1>Edit Your Account</h1>
+    {% if profile.photo == None %}
+    <img src="../../media/images/profile/default_profile_pic.png"/>
+    {% else %}
+    <img src="../../media/images/profile/{{profile.photo}}"/>
+    {% endif %}
+    <p>You can edit your account using the following form:</p>
+    <form action="/bookbarn/edit/{{profile.user.id}}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p><label for="photo">Upload a Picture</label></p>
+        <p><input type="file"></p>
+        <p><label for="address">Add Your Address</label></p>
+        <p><input type="text"></p>
+        <p><input type="submit" value="Save Changes"></p>
+    </form>
+</div>
+{% endblock %}
