@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, Profile
+from .models import Book #, Profile
 from urllib import request
 from django.core.files.base import ContentFile
 from django.core.files.images import get_image_dimensions
@@ -9,7 +9,7 @@ from django.urls import reverse
 class BookCreateForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ('title', 'url', 'desc', 'price')
+        fields = ('url', 'title', 'desc', 'price', 'listing_type')
 
     def get_absolute_url(self):
         return reverse('images:detail', args=[self.id, self.slug])
@@ -35,10 +35,10 @@ class BookCreateForm(forms.ModelForm):
             image.save()
             print(image_url)
         return image
-
+"""
 class ProfileEditForm(forms.ModelForm):
     class Meta:
-        model = Profile
+        model = User
         fields = ('photo', 'address')
 
     def clean_photo(self):
@@ -64,3 +64,4 @@ class ProfileEditForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+"""

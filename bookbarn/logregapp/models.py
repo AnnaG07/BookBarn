@@ -1,6 +1,6 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-from django.utils.timezone import now as timezone_now
+#from django.utils.translation import gettext_lazy as _
+#from django.utils.timezone import now as timezone_now
 #from imagekit.models import ImageSpecField
 #from pilkit.processors import ResizeToFill
 #import contextlib, os
@@ -34,14 +34,24 @@ class User(models.Model):
     last_name = models.CharField(max_length=60)
     email = models.EmailField()
     password = models.CharField(max_length=60)
+    photo = models.ImageField(upload_to='images/profile/', blank=True)
+    address = models.TextField(default="", blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     objects = UserManager()
 
+    def set_photo(self):
+        _photo = self.photo
+        if not _photo:
+            self.photo="../../media/images/profile/default_profile_pic.png"
+
+    def __str__(self):
+        return f'Profile for user {self.first_name}'
+"""
 def upload_to(instance, filename):
     now = timezone_now()
     base, extension = os.path.splitext(filename)
     extension = extension.lower()
     return f'images/profile/(instance.pk)(extension)'
-
-
+"""
+    

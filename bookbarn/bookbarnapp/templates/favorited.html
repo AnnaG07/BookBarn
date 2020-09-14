@@ -5,12 +5,12 @@
 
 {% block content %}
 <div id="header">
-    <span class="logo">BookBarn</span>
+    <span class="logo">BookBarn - Favorites</span>
     <ul class="menu">
         <li><a href="/bookbarn/homepage">Homepage</a></li>
-        <li><a href="/bookbarn/account/{{user_info.id}}">Account</a></li>
-        <li><a href="/bookbarn/orders/{{user_info.id}}">Orders</a></li>
-        <li><a href="/bookbarn/requests/{{user_info.id}}">Sale / Trade Requests</a></li>
+        <li><a href="/bookbarn/account/{{user.id}}">Account</a></li>
+        <li><a href="/bookbarn/orders/{{user.id}}">Orders</a></li>
+        <li><a href="/bookbarn/requests/{{user.id}}">Book Requests</a></li>
     </ul>
     <span class="user">
         {% if request.session.user_id != None %}
@@ -20,6 +20,35 @@
     </span>
 </div>
 <div class="content">
-    <h1>Favorited Books placeholder</h1>
+    <h3>Favorite Books</h3>
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th>Book Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Listing Type</th>
+                <th>Seller</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in user.faved_books.all %}
+            <tr>
+                <td><img src="../../media/{{book.image}}" alt="Book Image"></td>
+                <td>{{book.title}}</td>
+                <td>{{book.desc}}</td>
+                <td>{{book.price}}</td>
+                <td>{{book.listing_type}}</td>
+                <td>{{book.seller.first_name}}</td>
+                <td>
+                    <a href="/bookbarn/remove_fave/{{book.id}}">Un-Favorite</a> 
+                    | <a href="#">Make Request</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}
