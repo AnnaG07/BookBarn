@@ -11,9 +11,9 @@
         <li><a href="/">Login / Register</a></li>
         {% else %}
         <li><a href="/bookbarn/account/{{user_info.id}}">Account</a></li>
-        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorited Books</a></li>
+        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorite Books</a></li>
         <li><a href="/bookbarn/orders/{{user_info.id}}">Orders</a></li>
-        <li><a href="/bookbarn/requests/{{user_info.id}}">Sale / Trade Requests</a></li>
+        <li><a href="/bookbarn/requests/{{user_info.id}}">Requests</a></li>
         {% endif %}
     </ul>
     <span class="user">
@@ -24,24 +24,11 @@
     </span>
 </div>
 <div class="content">
-    <h3>Available BookBarn Books</h3>
-    <!--
-    <ul>
-        {% for book in object_list %}
-            <img src="{{ book.image.url }}" alt="{{ book.title }}">
-            <h4>Title: {{ book.title }}</h4>
-            <p>Description: {{ book.desc }}</p>
-            <p>Price: ${{ book.price }}</p>
-            <p>Listing Type: {{ book.listing_type }}</p>
-            <p>Seller: {{ book.seller.first_name }}</p>
-            <p>{{ book.faves.count }} Faves</p>
-        {% endfor %}
-    </ul>
-    -->
+    <h3>Available Books</h3>
     <table class="table table-striped">
         <thead class="thead-light">
             <tr>
-                <th><img src="#" alt="Book Image"></th>
+                <th>Book Image</th>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Price</th>
@@ -54,22 +41,23 @@
             {% for book in all_books %}
             <tr>
                 <td><img src="../../media/{{book.image}}" alt="Book Image"></td>
-                <td>{{book.title}}</td>
+                <td><a href="/bookbarn/detail/{{book.id}}">{{book.title}}</a></td>
                 <td>{{book.desc}}</td>
                 <td>{{book.price}}</td>
                 <td>{{book.listing_type}}</td>
                 <td>{{book.seller.first_name}}</td>
                 <td>
-                    <a href="/bookbarn/add_fave/{{book.id}}">Favorite</a> 
+                    {% if request.session.user_id != book.seller.id %}
+                    <a href="/bookbarn/add_fave/{{book.id}}">Favorite</a> | <a href="/bookbarn/make_request/{{book.id}}">Request</a> 
+                    {% endif %}
                     {% if request.session.user_id == book.seller.id %}
-                    | <a href="/bookbarn/delete/{{book.id}}">Delete</a>
+                    <a href="/bookbarn/edit_listing/{{book.id}}">Edit</a> | <a href="/bookbarn/delete/{{book.id}}">Delete</a>
                     {% endif %}
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    
     <a href="/bookbarn/listing">Add a Listing!</a>
 </div>
 {% endblock %}

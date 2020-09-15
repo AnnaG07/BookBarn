@@ -1,7 +1,6 @@
 from django.db import models
 from logregapp.models import User
 from django.utils.text import slugify
-from django.conf import settings
 
 class Book(models.Model):
     image = models.ImageField(upload_to='images/', default="")
@@ -13,6 +12,7 @@ class Book(models.Model):
     listing_type = models.CharField(max_length=100)
     seller = models.ForeignKey(User, related_name="seller_books", on_delete=models.CASCADE)
     faves = models.ManyToManyField(User, related_name="faved_books", blank=True)
+    requests = models.ManyToManyField(User, related_name="requested_books", blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -24,16 +24,9 @@ class Book(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='images/profile/', blank=True)
-    address = models.TextField(default="", blank=True)
-    created = models.DateTimeField(auto_now=True)
-
-    def set_photo(self):
-        _photo = self.photo
-        if not _photo:
-            self.photo="images/profile/default_profile_pic.png"
-
-    def __str__(self):
-        return f'Profile for user {self.user.first_name}'
+class Requests(models.Model):
+    content = models.TextField()
+    book = models.ForeignKey(Book, related_name="requested_book", on_delete=models.CASCADE)
+    requestor = models.ForeignKey(User, related_name="book_requestor", on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)

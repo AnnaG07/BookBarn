@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Make a Request{% endblock %}
+
+{% block content %}
+<div id="header">
+    <span class="logo">BookBarn - Make a Request</span>
+    <ul class="menu">
+        <li><a href="/bookbarn/homepage">Homepage</a></li>
+        <li><a href="/bookbarn/account/{{user_info.id}}">Account</a></li>
+        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorite Books</a></li>
+        <li><a href="/bookbarn/orders/{{user_info.id}}">Orders</a></li>
+        <li><a href="/bookbarn/requests/{{user_info.id}}">Requests</a></li>
+    </ul>
+    <span class="user">
+        {% if request.session.user_id != None %}
+            Hello, {{ request.session.name }} | 
+            <a href="/logout">Logout</a>
+        {% endif %}
+    </span>
+</div>
+<div class="content">
+    <h3>Make a Request</h3>
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th>Book Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Listing Type</th>
+                <th>Seller</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><img src="../../media/{{book.image}}" alt="Book Image"></td>
+            <td>{{book.title}}</td>
+            <td>{{book.desc}}</td>
+            <td>{{book.price}}</td>
+            <td>{{book.listing_type}}</td>
+            <td>{{book.seller.first_name}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <form action="/bookbarn/update_request/{{book.id}}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="content">
+        <input type="submit" value="Request">
+    </form>
+</div>
+{% endblock %}

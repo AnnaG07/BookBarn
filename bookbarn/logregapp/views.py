@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect#, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import logout, authenticate, login
-from django.conf import settings
+from django.contrib.auth import authenticate, logout, login
+#from django.conf import settings
 from .models import *
-from .forms import UserEditForm
+#from .forms import UserEditForm
 import bcrypt
 
 def base(request):
@@ -32,7 +32,9 @@ def register(request):
         hashedpw = bcrypt.hashpw(request.POST['password'].encode('utf-8'), bcrypt.gensalt())
         print(hashedpw)
         new_user = User.objects.create(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=hashedpw)
+        request.session['user_id'] = new_user.id
         request.session['name'] = new_user.first_name
+        #request.session['name'] = new_user.first_name
         return redirect('bookbarn/homepage')
 
 def success(request):
@@ -45,6 +47,3 @@ def logout_request(request):
     messages.info(request, "Logged out successfully!")
     request.session.clear()
     return redirect('/')
-
-
-

@@ -5,15 +5,15 @@
 
 {% block content %}
 <div id="header">
-    <span class="logo">BookBarn</span>
+    <span class="logo">BookBarn - Account</span>
     <ul class="menu">
         {% if request.session.user_id == None %}
         <li><a href="/">Login / Register</a></li>
         {% else %}
         <li><a href="/bookbarn/homepage">Homepage</a></li>
-        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorited Books</a></li>
+        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorite Books</a></li>
         <li><a href="/bookbarn/orders/{{user_info.id}}">Orders</a></li>
-        <li><a href="/bookbarn/requests/{{user_info.id}}">Sale / Trade Requests</a></li>
+        <li><a href="/bookbarn/requests/{{user_info.id}}">Book Requests</a></li>
         {% endif %}
     </ul>
     <span class="user">
@@ -24,19 +24,23 @@
     </span>
 </div>
 <div class="content">
-    <h1>Edit Your Account</h1>
-    {% if profile.photo == None %}
-    <img src="../../media/images/profile/default_profile_pic.png"/>
+    <h3>Account Info:</h3>
+    {% if user_info.photo == None %}
+    <img src="../../media/default_profile_pic.png"/>
     {% else %}
-    <img src="../../media/images/profile/{{profile.photo}}"/>
+    <img src="../../media/{{user_info.photo}}"/>
     {% endif %}
-    <p>You can edit your account using the following form:</p>
-    <form action="/bookbarn/edit/{{profile.user.id}}" method="post" enctype="multipart/form-data">
+    <p>First Name: {{user_info.first_name}}</p>
+    <p>Last Name: {{user_info.last_name}}</p>
+    <p>Email: {{user_info.email}}</p>
+    <p>Address: {{user_info.address}}</p>
+    <h3>Edit Your Account</h3>
+    <form action="/bookbarn/edit_account/{{user_info.id}}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <p><label for="photo">Upload a Picture</label></p>
-        <p><input type="file"></p>
+        <p><input type="file" name="photo"></p>
         <p><label for="address">Add Your Address</label></p>
-        <p><input type="text"></p>
+        <p><input type="text" name="address" value="{{user_info.address}}"></p>
         <p><input type="submit" value="Save Changes"></p>
     </form>
 </div>

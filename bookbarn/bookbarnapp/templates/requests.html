@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Trade / Sale Requests{% endblock %}
+{% block title %}Book Requests{% endblock %}
 
 {% block content %}
 <div id="header">
-    <span class="logo">BookBarn</span>
+    <span class="logo">BookBarn - Requests</span>
     <ul class="menu">
         <li><a href="/bookbarn/homepage">Homepage</a></li>
         <li><a href="/bookbarn/account/{{user_info.id}}">Account</a></li>
@@ -20,6 +20,12 @@
     </span>
 </div>
 <div class="content">
-    <h1>Book requests placeholder</h1>
+    <h3>Book Requests</h3>
+    {% for requests in user_books %}
+    <p>Book Requested: {{requests.book}}</p>
+    <p>Requestor: <a href="#">{{requests.requestor.first_name}}</a></p>
+    <p>Requestor Email: {{requests.requestor.email}}</p>
+    <p>Requestor Message: {{requests.content}}</p>
+    {% endfor %}
 </div>
 {% endblock %}
