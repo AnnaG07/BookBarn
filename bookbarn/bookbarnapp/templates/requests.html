@@ -21,11 +21,27 @@
 </div>
 <div class="content">
     <h3>Book Requests</h3>
-    {% for requests in user_books %}
-    <p>Book Requested: {{requests.book}}</p>
-    <p>Requestor: <a href="#">{{requests.requestor.first_name}}</a></p>
-    <p>Requestor Email: {{requests.requestor.email}}</p>
-    <p>Requestor Message: {{requests.content}}</p>
-    {% endfor %}
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th>Book Requested</th>
+                <th>Seller</th>
+                <th>Seller Email</th>
+                <th>Request Message</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for requests in user_books %}
+            <tr>
+                <td>{{requests.book}}</td>
+                <td><a href="#">{{requests.book.seller.first_name}}</td>
+                <td>{{requests.book.seller.email}}</td>
+                <td>{{requests.content}}</td>
+                <td><a href="/bookbarn/messenger/{{requests.book.id}}">Messenger</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

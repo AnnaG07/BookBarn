@@ -44,14 +44,12 @@ def add_fave(request, id):
     faved_book = Book.objects.get(id=id)
     user_fave = User.objects.get(id=request.session['user_id'])
     faved_book.faves.add(user_fave)
-    print(user_fave, faved_book)
     return redirect('/bookbarn/homepage')
 
 def remove_fave(request, id):
     faved_book = Book.objects.get(id=id)
     un_fave = User.objects.get(id=request.session['user_id'])
     faved_book.faves.remove(un_fave)
-    print(un_fave, faved_book)
     return redirect('/bookbarn/homepage')
     #return redirect('/bookbarn/favorited_books')
 
@@ -69,8 +67,23 @@ def requests(request, id):
     }
     return render(request, 'requests.html', context)
 
-#def responses(request, id):
+def messenger(request, id):
+    requests_by_user = User.objects.get(id=request.session['user_id'])
+    context = {
+        'user_info': User.objects.get(id=request.session['user_id']),
+        'book_request':Book.objects.get(id=id),
+        'all_requests': requests_by_user.book_requestor.all(),
+        'all_comments': Comment.objects.all(),
+    }
+    return render(request, 'messenger.html', context)
 
+def post_comment(request, id):
+    if request.method == 'POST':
+        poster = User.objects.get(id=request.session['user_id'])
+        requested = Requests.objects.get(id=id)
+        Comment.objects.create(content=request.POST['content'], request=requested, poster=poster)
+        return render(request, 'messenger.html')
+        #return redirect('/bookbarn/messenger')
 
 def make_request(request, id):
     context = {
@@ -98,8 +111,6 @@ def listing(request):
             new_item = form.save(commit=False)
             new_item.seller = User.objects.get(id=request.session['user_id'])
             new_item.save()
-            print(new_item, '**')
-            #messages.success(request, 'Book added successfully')
             return redirect('/bookbarn/homepage')
     else:
         form = BookCreateForm(data=request.GET)

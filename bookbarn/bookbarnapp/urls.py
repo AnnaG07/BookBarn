@@ -12,6 +12,8 @@ urlpatterns = [
     path('requests/<int:id>', views.requests),
     path('make_request/<int:id>', views.make_request),
     path('update_request/<int:id>', views.update_request),
+    path('messenger/<int:id>', views.messenger),
+    path('post_comment/<int:id>', views.post_comment),
     path('delete/<int:id>', views.delete),
     path('listing', views.listing),
     path('edit_listing/<int:id>', views.edit_listing),

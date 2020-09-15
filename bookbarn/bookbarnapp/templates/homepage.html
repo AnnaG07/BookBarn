@@ -30,11 +30,7 @@
             <tr>
                 <th>Book Image</th>
                 <th>Title</th>
-                <th>Description</th>
                 <th>Price</th>
-                <th>Listing Type</th>
-                <th>Seller</th>
-                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -42,18 +38,7 @@
             <tr>
                 <td><img src="../../media/{{book.image}}" alt="Book Image"></td>
                 <td><a href="/bookbarn/detail/{{book.id}}">{{book.title}}</a></td>
-                <td>{{book.desc}}</td>
                 <td>{{book.price}}</td>
-                <td>{{book.listing_type}}</td>
-                <td>{{book.seller.first_name}}</td>
-                <td>
-                    {% if request.session.user_id != book.seller.id %}
-                    <a href="/bookbarn/add_fave/{{book.id}}">Favorite</a> | <a href="/bookbarn/make_request/{{book.id}}">Request</a> 
-                    {% endif %}
-                    {% if request.session.user_id == book.seller.id %}
-                    <a href="/bookbarn/edit_listing/{{book.id}}">Edit</a> | <a href="/bookbarn/delete/{{book.id}}">Delete</a>
-                    {% endif %}
-                </td>
             </tr>
             {% endfor %}
         </tbody>

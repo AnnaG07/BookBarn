@@ -30,3 +30,10 @@ class Requests(models.Model):
     requestor = models.ForeignKey(User, related_name="book_requestor", on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+class Comment(models.Model):
+    content = models.TextField()
+    request = models.ForeignKey(Requests, related_name="comment_request", on_delete=models.CASCADE)
+    poster = models.ForeignKey(User, related_name="poster_comment", on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)

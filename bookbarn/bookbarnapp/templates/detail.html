@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{book.title}}{% endblock %}
+{% block title %}BookBarn - {{book.title}}{% endblock %}
 
 {% block content %}
 <div id="header">
-    <span class="logo">BookBarn</span>
+    <span class="logo">BookBarn - {{book.title}}</span>
     <ul class="menu">
         {% if request.session.user_id == None %}
         <li><a href="/">Login / Register</a></li>
         {% else %}
         <li><a href="/bookbarn/homepage">Homepage</a></li>
-        <li><a href="/bookbarn/account/{{user_info.id}}">Account</a></li>
-        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorited Books</a></li>
-        <li><a href="/bookbarn/orders/{{user_info.id}}">Orders</a></li>
-        <li><a href="/bookbarn/requests/{{user_info.id}}">Book Requests</a></li>
+        <li><a href="/bookbarn/account/{{book.seller.id}}">Account</a></li>
+        <li><a href="/bookbarn/favorited_books/{{book.seller.id}}">Favorited Books</a></li>
+        <li><a href="/bookbarn/orders/{{book.seller.id}}">Orders</a></li>
+        <li><a href="/bookbarn/requests/{{book.seller.id}}">Book Requests</a></li>
         {% endif %}
     </ul>
     <span class="user">
@@ -25,18 +25,46 @@
     </span>
 </div>
 <div class="content">
-    <h1>{{book.title}}</h1>
-    <img src="{{book.image.url}}" class="image_detail">
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th>Book Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Listing Type</th>
+                <th>Seller</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><img src="{{book.image.url}}" class="image_detail"></td>
+            <td>{{book.title}}</td>
+            <td>{{book.desc}}</td>
+            <td>{{book.price}}</td>
+            <td>{{book.listing_type}}</td>
+            <td>{{book.seller.first_name}}</td>
+            <td>
+                {% if request.session.user_id != book.seller.id %}
+                <a href="/bookbarn/add_fave/{{book.id}}">Favorite</a> | <a href="/bookbarn/make_request/{{book.id}}">Request</a> 
+                {% endif %}
+                {% if request.session.user_id == book.seller.id %}
+                <a href="/bookbarn/edit_listing/{{book.id}}">Edit</a> | <a href="/bookbarn/delete/{{book.id}}">Delete</a>
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
     {% with total_faves=book.faves.count %}
     <div class="image-info">
         <div>
             <span class="count">
-                {{total_faves}} like{{total_faves|pluralize}}
+                {{total_faves}} users have favorited this book!
             </span>
         </div>
-        {{book.desc|linebreaks}}
     </div>
-    <div class="image-likes">
+    <!--<div class="image-likes">
         {% for user in book.faves.all %}
         <div>
             <p>{{user.first_name}}</p>
@@ -44,7 +72,7 @@
         {% empty %}
         Nobody has favorited this book yet.
         {% endfor %}
-    </div>
+    </div>-->
     {% endwith %}
 </div>
 {% endblock %}

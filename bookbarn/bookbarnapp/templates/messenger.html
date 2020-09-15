@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Book Request Messenger{% endblock %}
+
+{% block content %}
+<div id="header">
+    <span class="logo">BookBarn - Messages</span>
+    <ul class="menu">
+        <li><a href="/bookbarn/homepage">Homepage</a></li>
+        <li><a href="/bookbarn/account/{{user_info.id}}">Account</a></li>
+        <li><a href="/bookbarn/favorited_books/{{user_info.id}}">Favorited Books</a></li>
+        <li><a href="/bookbarn/orders/{{user_info.id}}">Orders</a></li>
+        <li><a href="/bookbarn/requests/{{user_info.id}}">Requests</a></li>
+    </ul>
+    <span class="user">
+        {% if request.session.user_id != None %}
+            Hello, {{ request.session.name }} | 
+            <a href="/logout">Logout</a>
+        {% endif %}
+    </span>
+</div>
+<div class="content">
+    <h3>Book Requests - Messenger</h3>
+    {% for request in all_requests %}
+    <hr>
+    <!--<p>Book Image: <img src="../../media/{{book.image}}" alt="Book Image"></p>-->
+    <p>Requested: {{request.book}}</p>
+    <p>Seller: {{request.book.seller.first_name}}</p>
+    <p>Request Message: {{request.content}}</p>
+    <p>Posted by: {{request.requestor.first_name}} - {{request.updated}}</p>
+    <hr>
+    <h4>Comment on request:</h4>
+    <form action="/bookbarn/post_comment/{{request.id}}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="content">
+        <input type="submit" value="Comment">
+    </form>
+    <h3>Comments:</h3>
+    {% for comment in request.comment_request.all %}
+    <p>{{comment.content}}</p>
+    <p>Posted by: {{comment.poster.first_name}} - {{comment.updated}}</p>
+    
+    {% endfor %}
+    {% endfor %}
+</div>
+{% endblock %}
